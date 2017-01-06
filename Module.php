@@ -10,7 +10,9 @@ use komer45\balance\models\Transaction;
 class Module extends \yii\base\Module
 {
 	public $userModel = null;
-	//public $adminRoles = ['admin'];
+	public $adminRoles = ['admin'];
+	public $otherRoles = ['user'];
+	
 	public function init()
     {
 		parent::init();

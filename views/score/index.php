@@ -10,7 +10,6 @@ $this->title = 'Balance Scores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="balance-score-index">
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

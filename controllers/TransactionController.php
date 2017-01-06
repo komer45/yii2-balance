@@ -8,20 +8,30 @@ use komer45\balance\models\SearchTransaction;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
  */
 class TransactionController extends Controller
 {
-    public function behaviors()
+	public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+						'actions' => ['index', 'transaction-invert'],
+                        'roles' => $this->module->adminRoles,
+                    ],
+					[
+                        'allow' => true,
+						'actions' => ['partner-index'],
+                        'roles' => $this->module->otherRoles,
+                    ],
+                ]
             ],
         ];
     }
@@ -30,15 +40,27 @@ class TransactionController extends Controller
      * Lists all Transaction models.
      * @return mixed
      */
-    public function actionIndex($id = null)
+    public function actionIndex()
     {
         $searchModel = new SearchTransaction();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		
-		if($id){
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+	
+	
+	public function actionPartnerIndex($id)
+    {
+        $searchModel = new SearchTransaction();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		
+
 			$dataProvider->query->andWhere(['user_id' => $id]);
 			$dataProvider->sort->defaultOrder = ['id' => SORT_DESC];	
-		}
+
 		
         return $this->render('index', [
             'searchModel' => $searchModel,

@@ -23,8 +23,13 @@ echo BalanceWidget::widget();
         <?php echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-<?php if(!$_GET['id'])	{?>
-    <?php echo GridView::widget([
+<?
+$role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
+//echo '<pre>'; var_dump ($role);
+?>
+
+<?php if(!$_GET['id'] and (Yii::$app->user->can('administrator')))	{
+	echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -55,9 +60,9 @@ echo BalanceWidget::widget();
             ['class' => 'yii\grid\ActionColumn'],
         ],
 	]);} 
-		else {?>
-	
- <?php echo GridView::widget([
+		elseif (Yii::$app->user->can('user') and ($_GET['id'] == Yii::$app->user->id)) {
+			echo 'hello';
+			echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

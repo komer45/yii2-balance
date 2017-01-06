@@ -8,24 +8,31 @@ use komer45\balance\models\SearchScore;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\User; 
+use common\models\User;
+use yii\filters\AccessControl;
 
 /**
  * ScoreController implements the CRUD actions for Score model.
  */
 class ScoreController extends Controller
 {
-    public function behaviors()
+
+	public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => $this->module->adminRoles,
+                    ],
+                ]
             ],
         ];
     }
+	
+	
 
     /**
      * Lists all Score models.
