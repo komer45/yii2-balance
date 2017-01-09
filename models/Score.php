@@ -44,4 +44,11 @@ class Score extends \yii\db\ActiveRecord
             'balance' => 'Остаток',
         ];
     }
+	
+	public function getUser()
+	{
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		return $this->hasOne($userModel::className(), ['id' => 'user_id'])->one();
+	}
+		
 }

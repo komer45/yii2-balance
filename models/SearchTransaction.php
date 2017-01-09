@@ -62,9 +62,6 @@ class SearchTransaction extends Transaction
             'canceled' => $this->canceled,
         ]);
 
-        $query->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'refill_type', $this->refill_type]);
-
         return $dataProvider;
     }
 }

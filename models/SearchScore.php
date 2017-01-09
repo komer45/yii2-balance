@@ -56,7 +56,7 @@ class SearchScore extends Score
             'user_id' => $this->user_id,
             'balance' => $this->balance,
         ]);
-
+		
         return $dataProvider;
     }
 }

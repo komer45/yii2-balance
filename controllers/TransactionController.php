@@ -9,6 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\User;
+use yii\helpers\ArrayHelper;
+use komer45\balance\models\Score;
+use yii\data\Sort;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -23,7 +27,7 @@ class TransactionController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-						'actions' => ['index', 'transaction-invert'],
+						'actions' => ['index', 'transaction-invert', 'view', 'create', 'update', 'delete'],
                         'roles' => $this->module->adminRoles,
                     ],
 					[
@@ -45,9 +49,21 @@ class TransactionController extends Controller
         $searchModel = new SearchTransaction();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		
+		/**/
+		$sort = new Sort([
+			'attributes' => [
+				'type' => [
+					'default' => SORT_DESC,
+					'label' => 'Тип транзакции',
+				],
+			],	
+		]);
+		/**/
+		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'typeSort' => $sort
         ]);
     }
 	
@@ -57,11 +73,9 @@ class TransactionController extends Controller
         $searchModel = new SearchTransaction();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		
-
 			$dataProvider->query->andWhere(['user_id' => $id]);
 			$dataProvider->sort->defaultOrder = ['id' => SORT_DESC];	
 
-		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -88,6 +102,8 @@ class TransactionController extends Controller
     public function actionCreate()
     {
         $model = new Transaction();
+
+		$scores = Score::find()->all();
 		
         if ($model->load(Yii::$app->request->post())) {
 			$addTransaction = Yii::$app->balance->addTransaction($model->balance_id, $model->type, $model->amount, $model->refill_type);
@@ -95,6 +111,7 @@ class TransactionController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+				'scores' => $scores
             ]);
         }
     }
@@ -175,4 +192,5 @@ class TransactionController extends Controller
 		$transaction->update();
 		return $this->redirect(['index']);
 	}
+
 }

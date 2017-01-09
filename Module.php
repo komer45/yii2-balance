@@ -18,11 +18,11 @@ class Module extends \yii\base\Module
 		parent::init();
 		
 		if ($userModel == null){
-			$model = Yii::$app->user->identityClass;
+			$this->userModel = Yii::$app->user->identityClass;
 		}
     }
 	
-	 public function run()
+	public function run()
     {
 
     }

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use komer45\balance\widgets\BalanceWidget;
+use yii\data\Sort;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\modules\komer45\balance\models\SearchTransaction */
@@ -44,7 +45,16 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 			],
             'balance_id',
             //'date',
-            'type',
+            //'type',
+			[
+					'format' => 'raw',
+					'header' => $typeSort->link('type'),
+					'value' => function($model) {
+						if($model->type == 'in'){
+							return 'приход';
+						} return 'расход';
+					}
+			],
             //'amount',
             //'balance',
             'user_id',
@@ -54,7 +64,7 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-						return Html::a('Обратить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+						return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
 					}
 			],
             ['class' => 'yii\grid\ActionColumn'],

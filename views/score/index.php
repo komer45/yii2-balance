@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php 	
 				echo Html::a('Создать новый личный счет', ['create'], ['class' => 'btn btn-success']);  
 				echo "<span style='padding-left:10px;'> </span>";
-				echo Html::a('Создать все счета ', ['balances'], ['class' => 'btn btn-primary grid-button'])
+				echo Html::a('Создать счета', ['balances'], ['class' => 'btn btn-primary grid-button'])
 		?>
     </p>
 
