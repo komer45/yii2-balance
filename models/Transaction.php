@@ -38,7 +38,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['date', 'canceled'], 'safe'],
             [['type'], 'string'],
             [['amount', 'balance'], 'number'],
-            [['refill_type'], 'string', 'max' => 255],
+            [['refill_type', 'comment'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,11 +52,12 @@ class Transaction extends \yii\db\ActiveRecord
             'balance_id' => 'ID кошелька',
             'date' => 'Дата создания транзакции',
             'type' => 'Тип транзакции',
-            'amount' => 'Кол-во средств',
+            'amount' => 'Средств',
             'balance' => 'Остаток',
             'user_id' => 'ID пользователя',
             'refill_type' => 'Тип пополнения',
             'canceled' => 'Дата отмены транзакции ',
+			'comment' => 'Комментарий'
         ];
     }
 }

@@ -128,7 +128,7 @@ class TransactionController extends Controller
         $model = new Transaction();
 
 		$scores = Score::find()->all();
-		
+
         if ($model->load(Yii::$app->request->post())) {
 			$addTransaction = Yii::$app->balance->addTransaction($model->balance_id, $model->type, $model->amount, $model->refill_type);
 			return $this->redirect(['view', 'id' => $addTransaction]);
@@ -149,9 +149,18 @@ class TransactionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		
+		$typeBefore = $model->type;
+		$amountBefore = $model->amount;
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            /*if ($typeBefore == $model->type){
+				$model->balance = $model->balance - $amountBefore + $model->amount;
+			}elseif ($typeBefore != $model->type){
+				$model->balance = $model->balance - $amountBefore - $model->amount;
+			}
+			$model->save();*/
+			return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -196,19 +205,25 @@ class TransactionController extends Controller
 		$transaction = Transaction::findOne($id);
 		$transaction->canceled = date('Y.m.d H:m:s');
 		
+		$scoreUpdate = Score::find()->where(['user_id' => $transaction->user_id])->one();
+
 		if ($transaction->type == 'in'){		//операция "приход"
 			$newTransaction->type = 'out';
+			$newTransaction->balance = $transaction->balance - $transaction->amount;
 		}else {
 			$newTransaction->type = 'in';
+			$newTransaction->balance = $transaction->balance + $transaction->amount;
 		}
 		
+		$scoreUpdate->balance = $newTransaction->balance;
 		$newTransaction->balance_id = $transaction->balance_id;
-		$newTransaction->date =	date('Y.m.d H:m:s');
+		$newTransaction->date =	date("Y-m-d H:i:s");
 		$newTransaction->amount = $transaction->amount;
-		$newTransaction->balance = $transaction->balance;
 		$newTransaction->user_id = $transaction->user_id;
 		$newTransaction->refill_type = $transaction->refill_type;
+		
 		if($newTransaction->validate()){
+			$scoreUpdate->update();
 			$newTransaction->save();
 		} else {
 			return die("Uh-ho, somethings in 'TransactionController' went wrong!");

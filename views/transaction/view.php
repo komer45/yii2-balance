@@ -12,27 +12,32 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-view">
 
-    <p>
-        <?php echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php/* echo Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) */?>
-    </p>
-
     <?php echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'balance_id',
             'date',
-            'type',
+			[
+				'label' => 'Тип',
+				'value' => function($model){
+					if ($model->type == 'in'){
+						return 'Приход';
+					}else {
+						return 'Расход';
+					}
+				}
+			],
             'amount',
             'balance',
-            'user_id',
+			[
+				'label' => 'Пользователь',
+				'value' =>  function($model) {
+					$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
+					$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
+					return $user->username;								//выводим имя пользователя
+				}
+			],
             'refill_type',
             'canceled',
 			'comment'

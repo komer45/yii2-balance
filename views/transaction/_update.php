@@ -23,12 +23,14 @@ use yii\data\Sort;
 	
 
       <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
+	  
+	  
 
     <?php echo $form->field($model, 'type')->dropDownList([ 'in' => 'Приход', 'out' => 'Расход', ]) ?>
 
     <?php echo $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
 
-    <?php// echo $form->field($model, 'balance')->textInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'balance')->textInput(['readonly' => !$model->isNewRecord]) ?>
 
     <?php// echo $form->field($model, 'user_id')->textInput() ?>
 
@@ -37,7 +39,7 @@ use yii\data\Sort;
     <?php echo $form->field($model, 'comment')->textInput() ?>
 
     <div class="form-group">
-        <?php echo Html::submitButton($model->isNewRecord ? 'Создать' : 'Hello', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php echo Html::submitButton($model->isNewRecord ? 'Создать' : 'Подтвердить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	</div>
 
     <?php ActiveForm::end(); ?>

@@ -47,7 +47,9 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 						return Html::a($model->id, Url::to(['/balance/transaction/view', 'id' => $model->id]), ['class' => 'btn btn-default']);
 					}
 			],*/
-            'balance_id',
+            //'balance_id',
+			'amount',
+			'balance',
 			[
 			'format' => 'raw',
 			'header' => $userSort->link('user_id'),
@@ -100,11 +102,13 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-						return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+						if(!$model->canceled){
+							return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+						}else return 'Отменено';
 					}
 			],
-            ['class' => 'yii\grid\ActionColumn'],
-			['class' => 'yii\grid\ActionColumn', 'template' => '{update}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 65px;']]
+            //['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]
         ],
 	]);} 
 		elseif (Yii::$app->user->can('user') and ($_GET['id'] == Yii::$app->user->id)) {
@@ -121,7 +125,7 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
             'amount',
             'comment',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
 			
         ],
 ]);} ?>
