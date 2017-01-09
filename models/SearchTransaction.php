@@ -60,6 +60,7 @@ class SearchTransaction extends Transaction
             'balance' => $this->balance,
             'user_id' => $this->user_id,
             'canceled' => $this->canceled,
+			'type' => $this->type,
         ]);
 
         return $dataProvider;

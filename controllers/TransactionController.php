@@ -58,12 +58,36 @@ class TransactionController extends Controller
 				],
 			],	
 		]);
+		
+		$sort2 = new Sort([
+			'attributes' => [
+				'user_id' => [
+					'default' => SORT_DESC,
+					'label' => 'Пользователь',
+				],
+			],	
+		]);
+		
+		$sort3 = new Sort([
+			'attributes' => [
+				'id' => [
+					'default' => SORT_DESC,
+					'label' => 'Id',
+				],
+			],	
+		]);
+		
 		/**/
+		
+		$users = User::find()->asArray()->all();
 		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-			'typeSort' => $sort
+			'typeSort' => $sort,
+			'userSort' => $sort2,
+			'idSort' => $sort3,
+			'users' => $users
         ]);
     }
 	

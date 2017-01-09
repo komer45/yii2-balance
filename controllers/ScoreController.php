@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\User;
 use yii\filters\AccessControl;
+use yii\data\Sort;
 
 /**
  * ScoreController implements the CRUD actions for Score model.
@@ -43,9 +44,22 @@ class ScoreController extends Controller
         $searchModel = new SearchScore();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+		/**/
+		$sort = new Sort([
+			'attributes' => [
+				'user_id' => [
+					'default' => SORT_DESC,
+					'label' => 'Пользователь',
+				],
+			],	
+		]);
+		/**/
+		$users = User::find()->asArray()->all();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'sort' => $sort,
+			'users' => $users
         ]);
     }
 
