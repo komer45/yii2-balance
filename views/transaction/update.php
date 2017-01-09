@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="transaction-update">
 
-    <?php echo $this->render('_form', [
+    <?php echo $this->render('_update', [
         'model' => $model,
     ]) ?>
 

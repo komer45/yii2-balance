@@ -69,12 +69,21 @@ class ScoreController extends Controller
     public function actionCreate()
     {
         $model = new Score();
+		
+		$scores = Score::find()->asArray()->all();
+        //$userScores = User::find()->with('score.user_id')->one();
+		$users = User::find()->all();
+		
+		$subQuery = Score::find()->select('user_id');
+		$query = User::find()->where(['not in', 'id', $subQuery]);
+		$users = $query->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+				'users' => $users
             ]);
         }
     }
@@ -88,7 +97,7 @@ class ScoreController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

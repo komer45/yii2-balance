@@ -21,24 +21,6 @@ use yii\data\Sort;
 
     <?php// echo $form->field($model, 'balance_id')->textInput() ?>
 	
-	
-	<?php
-
-	echo $form->field($model, 'balance_id')->widget(Select2::classname(), [
-					'name' => 'SearchScore[user_id]',
-					//'model' => $userList,
-					'data' => ArrayHelper::map($scores, 'id', 'user.username'),
-					//'value' => $scoreses,
-					'theme' =>'classic',
-					//'options' => ['placeholder' => 'Choose a user ...'],
-					'pluginOptions' => [
-						'tags' => true,
-						'tokenSeparators' => [',', ' '],
-						'maximumInputLength' => 10
-					],
-				]);
-				//var_dump($select2->value);
-	?>
 
       <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
 

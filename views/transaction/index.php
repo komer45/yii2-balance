@@ -68,6 +68,7 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 					}
 			],
             ['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{update}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 65px;']]
         ],
 	]);} 
 		elseif (Yii::$app->user->can('user') and ($_GET['id'] == Yii::$app->user->id)) {
@@ -85,6 +86,7 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
             'comment',
 
             ['class' => 'yii\grid\ActionColumn'],
+			
         ],
 ]);} ?>
 

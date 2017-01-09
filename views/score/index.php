@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'user_id',
             'balance',
 
-			['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 65px;']]
+			['class' => 'yii\grid\ActionColumn', 'template' => '{delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 65px;']]
         ],
     ]); ?>
 
