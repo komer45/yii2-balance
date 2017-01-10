@@ -88,12 +88,12 @@ public function getScore($userId = null)
 ```
 Для быстрого переключения между кошельками и транзакциями (а так же для доступа пользователя к своим транзакциям) предусмотрены виджеты переходов. Подключение в представлении(views):
 ```'php'
-use komer45\balance\wisgets\BalanceWidget;	//виджет для доступа пользователя к транзакциям по своему кошельку
-use komer45\balance\wisgets\ScoreButtonWidget;	//виджет для доступа администратора к странице кошельков
-use komer45\balance\wisgets\TransactionButtonWidget; //виджет для доступа администратора к странице транзакций
+use komer45\balance\widgets\BalanceWidget;  //виджет для доступа пользователя к транзакциям по своему кошельку
+use komer45\balance\widgets\ScoreButtonWidget;  //виджет для доступа администратора к странице кошельков
+use komer45\balance\widgets\TransactionButtonWidget; //виджет для доступа администратора к странице транзакций
 ...
-<?=TransactionButtonWidget::widgets();?>
-<?=ScoreButtonWidget::widgets();?>
-<?=BalanceWidget::widgets();?>
+<?=TransactionButtonWidget::widget();?>
+<?=ScoreButtonWidget::widget();?>
+<?=BalanceWidget::widget();?>
 ```
 ```'php'
