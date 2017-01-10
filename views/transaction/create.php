@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\modules\komer45\balance\models\Transaction */
 
-$this->title = 'Create Transaction';
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->title = 'Создать транзакцию';
+$this->params['breadcrumbs'][] = ['label' => 'Транзакции', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-create">

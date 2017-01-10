@@ -72,6 +72,7 @@ class ScoreController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+			'user' => User::find()->asArray()->all()
         ]);
     }
 
@@ -108,7 +109,7 @@ class ScoreController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+ /*   public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 		
@@ -120,7 +121,7 @@ class ScoreController extends Controller
             ]);
         }
     }
-
+*/
     /**
      * Deletes an existing Score model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

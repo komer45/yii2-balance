@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel common\modules\komer45\balance\models\SearchBalanceScore */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Balance Scores';
+$this->title = 'Кошельки пользователей';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="balance-score-index">
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'filter' =>  Select2::widget([
 					'name' => 'SearchScore[user_id]',
 					'data'  => ArrayHelper::map($users, 'id', 'username'),
-					'options' => ['placeholder' => 'Статус ...'],
+					'options' => ['placeholder' => 'Владелец...'],
 					'pluginOptions' => [
 						'tags' => true,
 						'tokenSeparators' => [',', ' '],

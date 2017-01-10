@@ -12,29 +12,32 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel common\modules\komer45\balance\models\SearchTransaction */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Transactions';
+$this->title = 'Транзакции';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?
-echo BalanceWidget::widget();
+//echo BalanceWidget::widget();
 ?>
 <div class="transaction-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?php echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
 <?
 $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
-//echo '<pre>'; var_dump ($role);
 ?>
 
 <?php if(!$_GET['id'] and (Yii::$app->user->can('administrator')))	{
+	echo '<p>';
+		echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']);
+	echo '</p>';
 	echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+			'rowOptions' => function ($model){
+				if($model->type == 'in'){
+				  return ['style' => 'background-color:#98FB98;'];
+				} else return ['style' => 'background-color:#FFE4E1;'];
+			},
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			
@@ -83,7 +86,7 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 				'filter' =>  Select2::widget([
 					'name' => 'SearchTransaction[type]',
 					'data'  => ['in' => 'Приход', 'out' => 'Расход'],
-					'options' => ['placeholder' => 'Статус ...'],
+					'options' => ['placeholder' => 'Тип...'],
 					'pluginOptions' => [
 						'tags' => true,
 						'tokenSeparators' => [',', ' '],
@@ -112,21 +115,47 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
         ],
 	]);} 
 		elseif (Yii::$app->user->can('user') and ($_GET['id'] == Yii::$app->user->id)) {
-			echo 'hello';
 			echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+			'rowOptions' => function ($model){
+				if($model->type == 'in'){
+				  return ['style' => 'background-color:#98FB98;'];
+				} else return ['style' => 'background-color:#FFE4E1;'];
+			},
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'date',
-            'type',
+            //'type',
+			[
+				'format' => 'raw',
+					'header' => $typeSort->link('type'),
+
+					'value' => function($model) {
+						if($model->type == 'in'){
+							return 'приход';
+						} return 'расход';
+					},
+					
+				'filter' =>  Select2::widget([
+					'name' => 'SearchTransaction[type]',
+					'data'  => ['in' => 'Приход', 'out' => 'Расход'],
+					'options' => ['placeholder' => 'Тип...'],
+					'pluginOptions' => [
+						'tags' => true,
+						'tokenSeparators' => [',', ' '],
+						'maximumInputLength' => 10
+					],
+				])
+				
+			],
             'amount',
             'comment',
 
             //['class' => 'yii\grid\ActionColumn'],
-			
+			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]
         ],
 ]);} ?>
 

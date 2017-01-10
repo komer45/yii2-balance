@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\modules\komer45\balance\models\Transaction */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Транзакции', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-view">

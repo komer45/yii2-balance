@@ -39,15 +39,20 @@ class Balance extends Component{
 		$model->date = date('Y-m-d H:i:s');
 		$model->user_id = Score::find()->where(['id' => $balanceId])->one()->user_id;
 		$lastTransaction = Transaction::find()->where(['balance_id' => $balanceId])->orderBy(['id' => SORT_DESC])->one();
-				
+			
+		$score = Score::findOne($balanceId);
 		if(!$lastTransaction){
-			$model->balance = $model->balance;
+			$model->balance = $model->amount;
+			$score->balance = $model->amount;
 		}elseif($type == 'in'){	//приход средств
-			$model->balance = $lastTransaction->amount+$amount;
+			$model->balance = $lastTransaction->balance+$amount;
+			$score->balance = $score->balance + $amount;
 		}else{				//расход средств
-			$model->balance = $lastTransaction->amount-$amount;
+			$model->balance = $lastTransaction->balance-$amount;
+			$score->balance = $score->balance - $amount;
 		}
-
+		$score->update();
+		
 		if($model->save()){
 			return $model->id;
 		} else {

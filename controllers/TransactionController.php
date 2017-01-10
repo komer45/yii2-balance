@@ -96,13 +96,22 @@ class TransactionController extends Controller
     {
         $searchModel = new SearchTransaction();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		$dataProvider->query->andWhere(['user_id' => $id]);
+		$dataProvider->sort->defaultOrder = ['id' => SORT_DESC];	
 		
-			$dataProvider->query->andWhere(['user_id' => $id]);
-			$dataProvider->sort->defaultOrder = ['id' => SORT_DESC];	
-
+		$sort = new Sort([
+			'attributes' => [
+				'type' => [
+					'default' => SORT_DESC,
+					'label' => 'Тип транзакции',
+				],
+			],	
+		]);
+			
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'typeSort' => $sort,
         ]);
     }
 
@@ -146,7 +155,7 @@ class TransactionController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    /*public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 		
@@ -160,13 +169,13 @@ class TransactionController extends Controller
 				$model->balance = $model->balance - $amountBefore - $model->amount;
 			}
 			$model->save();*/
-			return $this->redirect(['view', 'id' => $model->id]);
+	/*		return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     /**
      * Deletes an existing Transaction model.
@@ -207,12 +216,14 @@ class TransactionController extends Controller
 		
 		$scoreUpdate = Score::find()->where(['user_id' => $transaction->user_id])->one();
 
+		$userScore = Score::find()->where(['user_id' => $transaction->user_id])->one();
+		
 		if ($transaction->type == 'in'){		//операция "приход"
 			$newTransaction->type = 'out';
-			$newTransaction->balance = $transaction->balance - $transaction->amount;
+			$newTransaction->balance = $userScore->balance - $transaction->amount;
 		}else {
 			$newTransaction->type = 'in';
-			$newTransaction->balance = $transaction->balance + $transaction->amount;
+			$newTransaction->balance = $userScore->balance + $transaction->amount;
 		}
 		
 		$scoreUpdate->balance = $newTransaction->balance;
@@ -223,11 +234,11 @@ class TransactionController extends Controller
 		$newTransaction->refill_type = $transaction->refill_type;
 		
 		if($newTransaction->validate()){
-			$scoreUpdate->update();
 			$newTransaction->save();
 		} else {
 			return die("Uh-ho, somethings in 'TransactionController' went wrong!");
 		}
+		$scoreUpdate->update();
 		$transaction->update();
 		return $this->redirect(['index']);
 	}
