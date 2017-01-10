@@ -86,3 +86,14 @@ public function getScore($userId = null)
 			return $userScore = Score::find()->where(['user_id' => Yii::$app->user->id])->one()->balance;
 	}
 ```
+Для быстрого переключения между кошельками и транзакциями (а так же для доступа пользователя к своим транзакциям) предусмотрены виджеты переходов. Подключение в представлении(views):
+```'php'
+use komer45\balance\wisgets\BalanceWidget;	//виджет для доступа пользователя к транзакциям по своему кошельку
+use komer45\balance\wisgets\ScoreButtonWidget;	//виджет для доступа администратора к странице кошельков
+use komer45\balance\wisgets\TransactionButtonWidget; //виджет для доступа администратора к странице транзакций
+...
+<?=TransactionButtonWidget::widgets();?>
+<?=ScoreButtonWidget::widgets();?>
+<?=BalanceWidget::widgets();?>
+```
+```'php'
