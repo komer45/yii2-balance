@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class create_table_balance_score extends Migration
+class m170111_091812_create_table_balance_score extends Migration
 {
 
     public function init()
