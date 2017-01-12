@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\User;
+//use common\models\User;
 use yii\helpers\ArrayHelper;
 use komer45\balance\models\Score;
 use yii\data\Sort;
@@ -78,16 +78,16 @@ class TransactionController extends Controller
 		]);
 		
 		/**/
-		
-		$users = User::find()->asArray()->all();
-		
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		$users = $userModel::find()->asArray()->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'typeSort' => $sort,
 			'userSort' => $sort2,
 			'idSort' => $sort3,
-			'users' => $users
+			'users' => $users,
         ]);
     }
 	
@@ -107,11 +107,20 @@ class TransactionController extends Controller
 				],
 			],	
 		]);
-			
+		
+		$sort2 = new Sort([
+			'attributes' => [
+				'user_id' => [
+					'default' => SORT_DESC,
+					'label' => 'Пользователь',
+				],
+			],	
+		]);		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'typeSort' => $sort,
+			'userSort' => $sort2
         ]);
     }
 

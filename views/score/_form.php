@@ -32,9 +32,6 @@ use yii\data\Sort;
 				]);
 
 	?>
-    <?php// echo $form->field($model, 'user_id')->textInput() ?>
-
-    <?php// echo $form->field($model, 'balance')->textInput() ?>
 
     <div class="form-group">
         <?php echo Html::submitButton($model->isNewRecord ? 'Создать' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -8,7 +8,7 @@ use komer45\balance\models\SearchScore;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\User;
+//use common\models\User;
 use yii\filters\AccessControl;
 use yii\data\Sort;
 
@@ -54,7 +54,9 @@ class ScoreController extends Controller
 			],	
 		]);
 		/**/
-		$users = User::find()->asArray()->all();
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		$users = $userModel::find()->asArray()->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -70,9 +72,10 @@ class ScoreController extends Controller
      */
     public function actionView($id)
     {
+		$userModel = Yii::$app->getModule('balance')->userModel;
         return $this->render('view', [
             'model' => $this->findModel($id),
-			'user' => User::find()->asArray()->all()
+			'user' => $userModel::find()->asArray()->all()
         ]);
     }
 
@@ -86,11 +89,11 @@ class ScoreController extends Controller
         $model = new Score();
 		
 		$scores = Score::find()->asArray()->all();
-        //$userScores = User::find()->with('score.user_id')->one();
-		$users = User::find()->all();
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		$users = $userModel::find()->all();
 		
 		$subQuery = Score::find()->select('user_id');
-		$query = User::find()->where(['not in', 'id', $subQuery]);
+		$query = $userModel::find()->where(['not in', 'id', $subQuery]);
 		$users = $query->all();
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -153,7 +156,8 @@ class ScoreController extends Controller
 	
 	public function actionBalances()
 	{
-		$allUsers = User::find()->all();
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		$allUsers = $userModel::find()->all();
 		//$balances = Score::find()->all();
 		
 		foreach ($allUsers as $user)

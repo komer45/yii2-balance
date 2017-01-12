@@ -38,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
 					'value' => function($model) {
 						$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
 						$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
-						return $user->username;								//выводим имя пользователя
+						if(!$user){
+							return false;
+						}
+						return $user->name;								//выводим имя пользователя
 					},
 					'filter' =>  Select2::widget([
 					'name' => 'SearchScore[user_id]',

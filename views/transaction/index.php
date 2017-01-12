@@ -15,21 +15,15 @@ use yii\helpers\ArrayHelper;
 $this->title = 'Транзакции';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?
-//echo BalanceWidget::widget();
-?>
 <div class="transaction-index">
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-<?
-$role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
-?>
-
-<?php if(!$_GET['id'] and (Yii::$app->user->can('administrator')))	{
+<?php
 	echo '<p>';
+	if (Yii::$app->user->can('administrator')){
 		echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']);
+	}
 	echo '</p>';
+	if( (!isset($_GET['id'])) or (isset($_GET['id']) and $_GET['id'] == Yii::$app->user->id)){
 	echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -42,38 +36,39 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
             ['class' => 'yii\grid\SerialColumn'],
 			
 			'id',
-			
-            /*[
-					'format' => 'raw',
-					'header' => $idSort->link('id'),
-					'value' => function($model) {
-						return Html::a($model->id, Url::to(['/balance/transaction/view', 'id' => $model->id]), ['class' => 'btn btn-default']);
-					}
-			],*/
-            //'balance_id',
 			'amount',
 			'balance',
 			[
-			'format' => 'raw',
-			'header' => $userSort->link('user_id'),
-			'value' => function($model) {
-				$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
-				$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
-				return $user->username;								//выводим имя пользователя
-			},
-			'filter' =>  Select2::widget([
-					'name' => 'SearchTransaction[user_id]',
-					'data'  => ArrayHelper::map($users, 'id', 'username'),
-					'options' => ['placeholder' => 'Владелец...'],
-					'pluginOptions' => [
-						'tags' => true,
-						'tokenSeparators' => [',', ' '],
-						'maximumInputLength' => 10
-					],
-				])
+				'format' => 'raw',
+				'header' => $userSort->link('user_id'),
+				'value' => function($model) {
+					$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
+					$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
+					if(!$user){
+						return false;
+					}
+					return $user->username;								//выводим имя пользователя
+				},
+				'filter' =>
+				
+					Select2::widget([
+						'name' => 'SearchTransaction[user_id]',
+						'data'  => function ($model){
+							if (Yii::$app->user->can('administrator')){
+								return ArrayHelper::map($users, 'id', 'username');
+							}else {
+								return false;
+							}
+						},
+							'options' => ['placeholder' => 'Владелец...'],
+						'pluginOptions' => [
+							'tags' => true,
+							'tokenSeparators' => [',', ' '],
+							'maximumInputLength' => 10
+						],
+					])
+					
 			],
-            //'date',
-            //'type',
 			[
 					'format' => 'raw',
 					'header' => $typeSort->link('type'),
@@ -95,68 +90,20 @@ $role = (Yii::$app->authManager->getRolesByUser(Yii::$app->user->id));
 				])
 				
 			],
-            //'amount',
-            //'balance',
-            //'user_id',
-
             'refill_type',
             'canceled',
-			//'comment',
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-						if(!$model->canceled){
-							return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
-						}else return 'Отменено';
+							if (Yii::$app->user->can('administrator')){
+							if(!$model->canceled){
+								return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+							}else return 'Отменено';
+						}return false;
 					}
 			],
-            //['class' => 'yii\grid\ActionColumn'],
 			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]
         ],
-	]);} 
-		elseif (Yii::$app->user->can('user') and ($_GET['id'] == Yii::$app->user->id)) {
-			echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-			'rowOptions' => function ($model){
-				if($model->type == 'in'){
-				  return ['style' => 'background-color:#98FB98;'];
-				} else return ['style' => 'background-color:#FFE4E1;'];
-			},
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'date',
-            //'type',
-			[
-				'format' => 'raw',
-					'header' => $typeSort->link('type'),
-
-					'value' => function($model) {
-						if($model->type == 'in'){
-							return 'приход';
-						} return 'расход';
-					},
-					
-				'filter' =>  Select2::widget([
-					'name' => 'SearchTransaction[type]',
-					'data'  => ['in' => 'Приход', 'out' => 'Расход'],
-					'options' => ['placeholder' => 'Тип...'],
-					'pluginOptions' => [
-						'tags' => true,
-						'tokenSeparators' => [',', ' '],
-						'maximumInputLength' => 10
-					],
-				])
-				
-			],
-            'amount',
-            'comment',
-
-            //['class' => 'yii\grid\ActionColumn'],
-			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]
-        ],
-]);} ?>
+	]);}?>
 
 </div>

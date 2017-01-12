@@ -19,9 +19,6 @@ use yii\data\Sort;
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php// echo $form->field($model, 'balance_id')->textInput() ?>
-	
-	
 	<?php
 
 	echo $form->field($model, 'balance_id')->widget(Select2::classname(), [
@@ -40,15 +37,10 @@ use yii\data\Sort;
 				//var_dump($select2->value);
 	?>
 
-      <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
 
     <?php echo $form->field($model, 'type')->dropDownList([ 'in' => 'Приход', 'out' => 'Расход', ]) ?>
 
     <?php echo $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
-
-    <?php// echo $form->field($model, 'balance')->textInput(['maxlength' => true]) ?>
-
-    <?php// echo $form->field($model, 'user_id')->textInput() ?>
 
     <?php echo $form->field($model, 'refill_type')->textInput(['maxlength' => true]) ?>
 

@@ -50,7 +50,7 @@ php yii migrate --migrationPath=vendor/komer45/yii2-balance/migrations
 				'on makePayment' => function($event){
 					$model = $event->model;
 					$userId = Yii::$app->Partnership->getUserByPartnerId($model->partner_id);
-					$balance = Yii::$app->balance->getUserBalance($userId);
+					$balance = Yii::$app->balance->getUserScore($userId);
 					Yii::$app->balance->addTransaction($balance->id, 'in', $model->sum, 'partnership rewads');
 				}
 ],
@@ -86,3 +86,4 @@ public function getScore($userId = null)
 			return $userScore = Score::find()->where(['user_id' => Yii::$app->user->id])->one()->balance;
 	}
 ```
+Если модель подключаемого User не соответствует 'common\models\User' то ее необходимо задать в Модуле(Module.php) изменив переменную $userModule;
