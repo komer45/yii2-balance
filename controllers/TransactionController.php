@@ -79,7 +79,11 @@ class TransactionController extends Controller
 		
 		/**/
 		$userModel = Yii::$app->getModule('balance')->userModel;
-		$users = $userModel::find()->asArray()->all();
+		if (Yii::$app->user->can('administrator')){
+			$users = $userModel::find()->asArray()->all();
+		} else {
+			$users = $userModel::findOne(Yii::$app->user->id);
+		}
 
         return $this->render('index', [
             'searchModel' => $searchModel,

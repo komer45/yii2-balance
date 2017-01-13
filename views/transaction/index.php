@@ -53,13 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				
 					Select2::widget([
 						'name' => 'SearchTransaction[user_id]',
-						'data'  => function ($model){
-							if (Yii::$app->user->can('administrator')){
-								return ArrayHelper::map($users, 'id', 'username');
-							}else {
-								return false;
-							}
-						},
+						'data'  => ArrayHelper::map($users, 'id', 'username'),
 							'options' => ['placeholder' => 'Владелец...'],
 						'pluginOptions' => [
 							'tags' => true,
