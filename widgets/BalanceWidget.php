@@ -17,10 +17,18 @@ class BalanceWidget extends Widget{
 	
 	public function run()
 	{
-		$score = Score::find()->where(['user_id' => Yii::$app->user->id])->one()->balance;
-		echo Yii::$app->balance->currencyName.
-		Html::a(' на счете ', Url::to(['/balance/transaction/index', 'id' => Yii::$app->user->id])).
-		$score;
+	?>
+	<h4>
+		<div>
+			<?php
+				$score = Score::find()->where(['user_id' => Yii::$app->user->id])->one()->balance;
+				echo Yii::$app->balance->currencyName.
+				Html::a(' на счете ', Url::to(['/balance/transaction/partner-index', 'id' => Yii::$app->user->id])).
+				$score;
+			?>
+		</div>	
+	</h4>
+	<?php
 	}
 	
 }

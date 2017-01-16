@@ -10,5 +10,6 @@ class Bootstrap implements BootstrapInterface
 {
 	public function bootstrap($app)	//$app - сервис локатор
     {
+		//ini_set('error_reporting', E_ALL);
 	}
 }

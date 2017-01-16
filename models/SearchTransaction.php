@@ -60,10 +60,8 @@ class SearchTransaction extends Transaction
             'balance' => $this->balance,
             'user_id' => $this->user_id,
             'canceled' => $this->canceled,
+			'type' => $this->type,
         ]);
-
-        $query->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'refill_type', $this->refill_type]);
 
         return $dataProvider;
     }

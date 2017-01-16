@@ -19,35 +19,27 @@ use yii\data\Sort;
 
     <?php echo $form->errorSummary($model); ?>
 
-	<?php
+    <?php// echo $form->field($model, 'balance_id')->textInput() ?>
+	
 
-	echo $form->field($model, 'balance_id')->widget(Select2::classname(), [
-					'name' => 'SearchScore[user_id]',
-					//'model' => $userList,
-					'data' => ArrayHelper::map($scores, 'id', 'user.username'),
-					//'value' => $scoreses,
-					'theme' =>'classic',
-					//'options' => ['placeholder' => 'Choose a user ...'],
-					'pluginOptions' => [
-						'tags' => true,
-						'tokenSeparators' => [',', ' '],
-						'maximumInputLength' => 10
-					],
-				]);
-				//var_dump($select2->value);
-	?>
-
+      <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
+	  
+	  
 
     <?php echo $form->field($model, 'type')->dropDownList([ 'in' => 'Приход', 'out' => 'Расход', ]) ?>
 
     <?php echo $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
+
+    <?php echo $form->field($model, 'balance')->textInput(['readonly' => !$model->isNewRecord]) ?>
+
+    <?php// echo $form->field($model, 'user_id')->textInput() ?>
 
     <?php echo $form->field($model, 'refill_type')->textInput(['maxlength' => true]) ?>
 
     <?php echo $form->field($model, 'comment')->textInput() ?>
 
     <div class="form-group">
-        <?php echo Html::submitButton($model->isNewRecord ? 'Создать' : 'Hello', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php echo Html::submitButton($model->isNewRecord ? 'Создать' : 'Подтвердить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	</div>
 
     <?php ActiveForm::end(); ?>

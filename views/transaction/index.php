@@ -4,73 +4,100 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use komer45\balance\widgets\BalanceWidget;
+use yii\data\Sort;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\modules\komer45\balance\models\SearchTransaction */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Transactions';
+$this->title = 'Транзакции';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?
-echo BalanceWidget::widget();
-?>
 <div class="transaction-index">
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-<?php if(!$_GET['id'])	{?>
-    <?php echo GridView::widget([
+<?php
+	echo '<p>';
+	if (Yii::$app->user->can('administrator')){
+		echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']);
+	}
+	echo '</p>';
+	if( (!isset($_GET['id'])) or (isset($_GET['id']) and $_GET['id'] == Yii::$app->user->id)){
+	echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+			'rowOptions' => function ($model){
+				if($model->type == 'in'){
+				  return ['style' => 'background-color:#98FB98;'];
+				} else return ['style' => 'background-color:#FFE4E1;'];
+			},
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            [
-					'format' => 'raw',
-					'header' => 'Id',
-					'value' => function($model) {
-						return Html::a($model->id, Url::to(['/balance/transaction/view', 'id' => $model->id]), ['class' => 'btn btn-default']);
+			
+			'id',
+			'amount',
+			'balance',
+			[
+				'format' => 'raw',
+				'header' => $userSort->link('user_id'),
+				'value' => function($model) {
+					$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
+					$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
+					if(!$user){
+						return false;
 					}
+					return $user->username;								//выводим имя пользователя
+				},
+				'filter' =>
+				
+					Select2::widget([
+						'name' => 'SearchTransaction[user_id]',
+						'data'  => ArrayHelper::map($users, 'id', 'username'),
+							'options' => ['placeholder' => 'Владелец...'],
+						'pluginOptions' => [
+							'tags' => true,
+							'tokenSeparators' => [',', ' '],
+							'maximumInputLength' => 10
+						],
+					])
+					
 			],
-            'balance_id',
-            //'date',
-            'type',
-            //'amount',
-            //'balance',
-            'user_id',
+			[
+					'format' => 'raw',
+					'header' => $typeSort->link('type'),
+					'value' => function($model) {
+						if($model->type == 'in'){
+							return 'приход';
+						} return 'расход';
+					},
+					
+				'filter' =>  Select2::widget([
+					'name' => 'SearchTransaction[type]',
+					'data'  => ['in' => 'Приход', 'out' => 'Расход'],
+					'options' => ['placeholder' => 'Тип...'],
+					'pluginOptions' => [
+						'tags' => true,
+						'tokenSeparators' => [',', ' '],
+						'maximumInputLength' => 10
+					],
+				])
+				
+			],
             'refill_type',
             'canceled',
-			//'comment',
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-						return Html::a('Обратить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+							if (Yii::$app->user->can('administrator')){
+							if(!$model->canceled){
+								return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
+							}else return 'Отменено';
+						}return false;
 					}
 			],
-            ['class' => 'yii\grid\ActionColumn'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]
         ],
-	]);} 
-		else {?>
-	
- <?php echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'date',
-            'type',
-            'amount',
-            'comment',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-]);} ?>
+	]);}?>
 
 </div>
