@@ -7,10 +7,21 @@ use yii\widgets\DetailView;
 /* @var $model common\modules\komer45\balance\models\Transaction */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Транзакции', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-view">
+
+    <p>
+        <?php echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php echo Html::a('Delete', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
     <?php echo DetailView::widget([
         'model' => $model,
@@ -18,26 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'balance_id',
             'date',
-			[
-				'label' => 'Тип',
-				'value' => function($model){
-					if ($model->type == 'in'){
-						return 'Приход';
-					}else {
-						return 'Расход';
-					}
-				}
-			],
+            'type',
             'amount',
             'balance',
-			[
-				'label' => 'Пользователь',
-				'value' =>  function($model) {
-					$userModel = Yii::$app->user->identity;			//Для идентифицирования пользователей системы
-					$user = $userModel::findOne($model->user_id);	//находим пользователя по данному полю
-					return $user->username;								//выводим имя пользователя
-				}
-			],
+            'user_id',
             'refill_type',
             'canceled',
 			'comment'

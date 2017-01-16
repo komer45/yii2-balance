@@ -8,32 +8,24 @@ use komer45\balance\models\SearchScore;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-//use common\models\User;
-use yii\filters\AccessControl;
-use yii\data\Sort;
+use common\models\User; 
 
 /**
  * ScoreController implements the CRUD actions for Score model.
  */
 class ScoreController extends Controller
 {
-
-	public function behaviors()
+    public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->adminRoles,
-                    ],
-                ]
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
             ],
         ];
     }
-	
-	
 
     /**
      * Lists all Score models.
@@ -44,24 +36,9 @@ class ScoreController extends Controller
         $searchModel = new SearchScore();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		/**/
-		$sort = new Sort([
-			'attributes' => [
-				'user_id' => [
-					'default' => SORT_DESC,
-					'label' => 'Пользователь',
-				],
-			],	
-		]);
-		/**/
-		$userModel = Yii::$app->getModule('balance')->userModel;
-		$users = $userModel::find()->asArray()->all();
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-			'sort' => $sort,
-			'users' => $users
         ]);
     }
 
@@ -72,10 +49,8 @@ class ScoreController extends Controller
      */
     public function actionView($id)
     {
-		$userModel = Yii::$app->getModule('balance')->userModel;
         return $this->render('view', [
             'model' => $this->findModel($id),
-			'user' => $userModel::find()->asArray()->all()
         ]);
     }
 
@@ -87,21 +62,12 @@ class ScoreController extends Controller
     public function actionCreate()
     {
         $model = new Score();
-		
-		$scores = Score::find()->asArray()->all();
-		$userModel = Yii::$app->getModule('balance')->userModel;
-		$users = $userModel::find()->all();
-		
-		$subQuery = Score::find()->select('user_id');
-		$query = $userModel::find()->where(['not in', 'id', $subQuery]);
-		$users = $query->all();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-				'users' => $users
             ]);
         }
     }
@@ -112,10 +78,10 @@ class ScoreController extends Controller
      * @param integer $id
      * @return mixed
      */
- /*   public function actionUpdate($id)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -124,7 +90,7 @@ class ScoreController extends Controller
             ]);
         }
     }
-*/
+
     /**
      * Deletes an existing Score model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -156,8 +122,7 @@ class ScoreController extends Controller
 	
 	public function actionBalances()
 	{
-		$userModel = Yii::$app->getModule('balance')->userModel;
-		$allUsers = $userModel::find()->all();
+		$allUsers = User::find()->all();
 		//$balances = Score::find()->all();
 		
 		foreach ($allUsers as $user)
@@ -170,7 +135,7 @@ class ScoreController extends Controller
 				
 				if($userBalance->validate()){
 					$userBalance->save();
-				} else die('Uh-oh, somethings in ScoreController went wrong!');
+				} else die('Uh-oh, somethings went wrong!');
 			}
 		}
 		return $this->redirect(['index']);

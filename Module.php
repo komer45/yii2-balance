@@ -10,19 +10,17 @@ use komer45\balance\models\Transaction;
 class Module extends \yii\base\Module
 {
 	public $userModel = null;
-	public $adminRoles = ['admin'];
-	public $otherRoles = ['user'];
-	
+	//public $adminRoles = ['admin'];
 	public function init()
     {
 		parent::init();
 		
-		if (!isset($userModel)){
-			$this->userModel = Yii::$app->user->identityClass;
+		if ($userModel == null){
+			$model = Yii::$app->user->identityClass;
 		}
     }
 	
-	public function run()
+	 public function run()
     {
 
     }

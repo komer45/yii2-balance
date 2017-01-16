@@ -27,7 +27,7 @@ class Score extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
+            [['user_id', 'balance'], 'required'],
             [['user_id'], 'integer'],
             [['balance'], 'number'],
         ];
@@ -40,15 +40,8 @@ class Score extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Кошелек пользователя',
+            'user_id' => 'ID пользователя',
             'balance' => 'Остаток',
         ];
     }
-	
-	public function getUser()
-	{
-		$userModel = Yii::$app->getModule('balance')->userModel;
-		return $this->hasOne($userModel::className(), ['id' => 'user_id'])->one();
-	}
-		
 }
