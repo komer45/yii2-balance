@@ -72,7 +72,7 @@ php yii migrate --migrationPath=vendor/komer45/yii2-balance/migrations
 ...
 use komer45\balance\models\Score;
 ...
-	public function afterSave()
+	public function afterSave($p1, $p2)
 	{
 		$findUser = Score::find()->where(['user_id' => $this->getId()])->one();
 		if (!$findUser){
