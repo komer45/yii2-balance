@@ -120,11 +120,14 @@ class TransactionController extends Controller
 				],
 			],	
 		]);		
+		$userModel = Yii::$app->getModule('balance')->userModel;
+		$users = $userModel::findOne(Yii::$app->user->id);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'typeSort' => $sort,
-			'userSort' => $sort2
+			'userSort' => $sort2,
+			'users' => $users
         ]);
     }
 
