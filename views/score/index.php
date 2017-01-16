@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						if(!$user){
 							return false;
 						}
-						return $user->name;								//выводим имя пользователя
+						return $user->username;								//выводим имя пользователя
 					},
 					'filter' =>  Select2::widget([
 					'name' => 'SearchScore[user_id]',
