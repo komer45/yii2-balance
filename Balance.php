@@ -10,7 +10,7 @@ use komer45\balance\models\SearchTransaction;
 
 class Balance extends Component{
 	
-	public $currencyName = 'rub';
+	public $currencyName = 'баллов';
 	public $adminRoles = ['admin'];
 	public $otherRoles = ['user'];
 	 

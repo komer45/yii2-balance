@@ -36,7 +36,8 @@ php yii migrate --migrationPath=vendor/komer45/yii2-balance/migrations
 		'balance' => [
 				'class' => 'komer45\balance\Module',
 				'adminRoles' => ['superadmin', 'administrator'],
-				'otherRoles' => ['manager', 'user']
+				'otherRoles' => ['manager', 'user'],
+				'currencyName' => 'баллов'
 				],
 	...
 	]

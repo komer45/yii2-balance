@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-							if (Yii::$app->user->can('administrator')){
+						if (Yii::$app->user->can('administrator')){
 							if(!$model->canceled){
 								return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
 							}else return 'Отменено';

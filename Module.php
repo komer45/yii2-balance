@@ -9,9 +9,10 @@ use komer45\balance\models\Transaction;
 
 class Module extends \yii\base\Module
 {
-	public $userModel = null;
-	public $adminRoles = ['admin'];
+	public $userModel = 'common\models\user\User';
+	public $adminRoles = ['administrator'];
 	public $otherRoles = ['user'];
+	public $currencyName = 'баллов';
 	
 	public function init()
     {
