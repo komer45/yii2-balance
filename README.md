@@ -99,3 +99,13 @@ public function getScore($userId = null)
 	}
 ```
 Если модель подключаемого User не соответствует 'common\models\User' то ее необходимо задать в Модуле(Module.php) изменив переменную $userModule;
+Для облегчения переходов и информатирования пользователя о количестве баланса предусмотренны следующие виджеты:
+```'php'
+use komer45\balance\widgets\BalanceWidget;			 //Виджет для вывода пользователю его баланса со ссылкой на историю его транзакций 
+use komer45\balance\widgets\ScoreButtonWidget;		 //Виджет для перехода на страницу кошельков
+use komer45\balance\widgets\TransactionButtonWidget; //Виджет для перехода на страницу транзакций
+...
+echo BalanceWidget::widget();
+echo ScoreButtonWidget::widget();
+echo TransactionButtonWidget::widget();
+```
