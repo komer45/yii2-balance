@@ -19,9 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 <?php
 	echo '<p>';
-	if (Yii::$app->user->can('administrator')){
+	//if (Yii::$app->user->can('administrator')){
 		echo Html::a('Создать транзакцию', ['create'], ['class' => 'btn btn-success']);
-	}
+	//}
 	echo '</p>';
 	if( (!isset($_GET['id'])) or (isset($_GET['id']) and $_GET['id'] == Yii::$app->user->id)){
 	echo GridView::widget([
@@ -89,11 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 					'format' => 'raw',
 					'value' => function($model) {
-						if (Yii::$app->user->can('administrator')){
+							//if (Yii::$app->user->can('administrator')){
 							if(!$model->canceled){
 								return Html::a('Отменить', Url::to(['/balance/transaction/transaction-invert', 'id' => $model->id]), ['class' => 'btn btn-default']);
 							}else return 'Отменено';
-						}return false;
+						//}return false;
 					}
 			],
 			['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'options' => ['style' => 'width: 40px;']]

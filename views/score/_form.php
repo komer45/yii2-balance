@@ -18,7 +18,7 @@ use yii\data\Sort;
 
     <?php echo $form->errorSummary($model); ?>
 	
-	<?
+	<?php
 
 	echo $form->field($model, 'user_id')->widget(Select2::classname(), [
 					'name' => 'SearchScore[user_id]',

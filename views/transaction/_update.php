@@ -22,7 +22,7 @@ use yii\data\Sort;
     <?php// echo $form->field($model, 'balance_id')->textInput() ?>
 	
 
-      <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
+    <?php// echo $form->field($model, 'balance_id')->dropDownList([$users]) ?>
 	  
 	  
 
