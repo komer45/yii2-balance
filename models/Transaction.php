@@ -55,7 +55,7 @@ class Transaction extends \yii\db\ActiveRecord
             'amount' => 'Средств',
             'balance' => 'Остаток',
             'user_id' => 'ID пользователя',
-            'refill_type' => 'Тип пополнения',
+            'refill_type' => 'Тип операции',
             'canceled' => 'Дата отмены транзакции ',
 			'comment' => 'Комментарий'
         ];

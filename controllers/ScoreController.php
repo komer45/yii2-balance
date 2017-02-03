@@ -69,7 +69,7 @@ class ScoreController extends Controller
      * Displays a single Score model.
      * @param integer $id
      * @return mixed
-     */
+     *//*
     public function actionView($id)
     {
 		$userModel = Yii::$app->getModule('balance')->userModel;
@@ -77,7 +77,7 @@ class ScoreController extends Controller
             'model' => $this->findModel($id),
 			'user' => $userModel::find()->asArray()->all()
         ]);
-    }
+    }*/
 
     /**
      * Creates a new Score model.
